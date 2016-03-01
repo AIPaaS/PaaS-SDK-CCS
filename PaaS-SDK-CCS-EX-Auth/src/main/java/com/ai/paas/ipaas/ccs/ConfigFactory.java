@@ -1,8 +1,6 @@
 package com.ai.paas.ipaas.ccs;
 
-import com.ai.paas.ipaas.ccs.constants.ConfigCenterConstants;
 import com.ai.paas.ipaas.ccs.impl.ConfigClient;
-import com.ai.paas.ipaas.util.CiperUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +25,7 @@ public class ConfigFactory {
     public static IConfigClient getConfigClient(int timeout) throws Exception {
         String zkAddr = config.getProperty("ccs.zk_address", "127.0.0.1:2181");
         String userName = config.getProperty("ccs.userName");
+        logger.info("Username:{} zkAddress:{}", userName, zkAddr);
         // check user name
         if (userName == null || userName.length() == 0) {
             throw new IllegalArgumentException("ccs.userName cannot be null");
