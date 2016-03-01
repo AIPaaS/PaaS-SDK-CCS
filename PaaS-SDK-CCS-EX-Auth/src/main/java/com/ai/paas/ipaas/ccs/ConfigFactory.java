@@ -10,19 +10,10 @@ import java.util.Properties;
 public class ConfigFactory {
 
     private static Logger logger = LogManager.getLogger(ConfigFactory.class);
-    private static Properties config = new Properties();
+
     private static final int DEFAULT_TIMEOUT = 1000 * 10;
 
-    static {
-        try {
-            config.load(ConfigFactory.class.getResourceAsStream("/ccs.conf"));
-        } catch (IOException e) {
-            logger.error("Failed to load ccs.conf.", e);
-        }
-    }
-
-
-    public static IConfigClient getConfigClient(int timeout) throws Exception {
+    public static IConfigClient getConfigClient(Properties config, int timeout) throws Exception {
         String zkAddr = config.getProperty("ccs.zk_address", "127.0.0.1:2181");
         String userName = config.getProperty("ccs.userName");
         logger.info("Username:{} zkAddress:{}", userName, zkAddr);
@@ -39,6 +30,18 @@ public class ConfigFactory {
 
         return new ConfigClient.ConfigClientBuilder(zkAddr, userName, password).timeOut(timeout).
                 createUserNodeWithAllPermissionIfNecessary().build();
+    }
+
+
+    public static IConfigClient getConfigClient(int timeout) throws Exception {
+        Properties config = new Properties();
+        try {
+            config.load(ConfigFactory.class.getResourceAsStream("/ccs.conf"));
+        } catch (IOException e) {
+            logger.error("Failed to load ccs.conf.", e);
+        }
+
+        return getConfigClient(config, timeout);
     }
 
     public static IConfigClient getConfigClient() throws Exception {
