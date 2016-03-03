@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigFactory {
@@ -42,6 +43,21 @@ public class ConfigFactory {
         }
 
         return getConfigClient(config, timeout);
+    }
+
+    public static IConfigClient getConfigClient(InputStream confiFileStream) throws Exception {
+        return getConfigClient(confiFileStream, DEFAULT_TIMEOUT);
+    }
+
+    public static IConfigClient getConfigClient(InputStream confiFileStream, int timeout) throws Exception {
+        Properties config = new Properties();
+        try {
+            config.load(confiFileStream);
+        } catch (IOException e) {
+            logger.error("Failed to load ccs.conf.", e);
+        }
+
+        return getConfigClient(config, DEFAULT_TIMEOUT);
     }
 
     public static IConfigClient getConfigClient() throws Exception {

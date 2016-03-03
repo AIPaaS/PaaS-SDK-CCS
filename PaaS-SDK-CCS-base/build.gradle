@@ -15,7 +15,7 @@ publishing {
                         delegate.dependency {
                             delegate.groupId("com.ai")
                             delegate.artifactId("ipaas-zookeeper-utility")
-                            delegate.version("0.2.2-SNAPSHOT")
+                            delegate.version("0.1-SNAPSHOT")
                         }
                     }
                 }
