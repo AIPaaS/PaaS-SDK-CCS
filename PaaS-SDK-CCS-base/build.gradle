@@ -17,6 +17,12 @@ publishing {
                             delegate.artifactId("ipaas-zookeeper-utility")
                             delegate.version("0.1-SNAPSHOT")
                         }
+                        //com.ai:ipaas-common:0.1-SNAPSHOT
+                        delegate.dependency {
+                            delegate.groupId("com.ai")
+                            delegate.artifactId("ipaas-common")
+                            delegate.version("0.1-SNAPSHOT")
+                        }
                     }
                 }
             }
