@@ -5,7 +5,7 @@ allprojects{
 
     ext {
         //moduleName="ipaas-config-sdk";
-        moduleVersion="0.1-SNAPSHOT"
+        moduleVersion="0.2.2-SNAPSHOT"
         publishUserName = "devadm"
         publishUserPassword = "Devadm@1212"
         //publishURL="http://10.1.228.199:18081/nexus/content/repositories/releases/"
@@ -45,9 +45,27 @@ subprojects{
 
 }
 
-project("PaaS-SDK-CCS-base"){
+
+project("iPaas-Config-Inner-SDK"){
     project.ext {
-        moduleName = "paas-sdk-ccs-base"
+        moduleName = "ipaas-ccs-inner"
+    }
+
+    jar {
+        baseName moduleName
+        version moduleVersion
+        include 'com/ai/paas/ipaas/ccs/inner/**'
+        manifest {
+            attributes 'packageName': moduleName, 'Built-By': builtBy,'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
+        }
+    }
+
+    publish.dependsOn build
+}
+
+project("iPaas-Config-SDK"){
+    project.ext {
+        moduleName = "ipaas-ccs"
     }
 
     jar {
@@ -62,43 +80,9 @@ project("PaaS-SDK-CCS-base"){
     publish.dependsOn build
 }
 
-project("PaaS-SDK-CCS-IC-Auth"){
+project("iPaas-Zookeeper-Utility"){
     project.ext {
-        moduleName = "paas-sdk-ccs-include-auth"
-    }
-
-    jar {
-        baseName moduleName
-        version moduleVersion
-        include 'com/ai/paas/ipaas/ccs/**'
-        manifest {
-            attributes 'packageName': moduleName, 'Built-By': builtBy,'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
-        }
-    }
-
-    publish.dependsOn build
-}
-
-project("PaaS-SDK-CCS-EX-Auth"){
-    project.ext {
-        moduleName = "paas-sdk-ccs-exclude-auth"
-    }
-
-    jar {
-        baseName moduleName
-        version moduleVersion
-        include 'com/ai/paas/ipaas/ccs/**'
-        manifest {
-            attributes 'packageName': moduleName, 'Built-By': builtBy,'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
-        }
-    }
-
-    publish.dependsOn build
-}
-
-project("PaaS-Zookeeper-Utility"){
-    project.ext {
-        moduleName = "paas-zookeeper-utility"
+        moduleName = "ipaas-zookeeper-utility"
     }
 
     jar {
