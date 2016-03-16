@@ -53,7 +53,7 @@ public class ZKPoolFactory {
                 client = new ZKClient(zkAddress, timeOut, new String[]{ConfigCenterConstants.ZKAuthSchema.DIGEST, getAuthInfo(zkUser, zkPasswd)});
                 client.addAuth(ConfigCenterConstants.ZKAuthSchema.DIGEST, getAuthInfo(zkUser, zkPasswd));
             } else {
-                client = new ZKClient(zkAddress, timeOut, null);
+                client = new ZKClient(zkAddress, timeOut, new String[]{});
             }
         } catch (Exception e) {
             throw new ConfigException(ResourceUtil.getMessage(BundleKeyConstant.GET_CONFIG_CLIENT_FAILED));

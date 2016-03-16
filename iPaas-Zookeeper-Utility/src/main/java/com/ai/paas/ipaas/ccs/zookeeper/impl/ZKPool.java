@@ -8,12 +8,20 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ZKPool {
     private static ConcurrentHashMap<String, ZKClient> clients = new ConcurrentHashMap<String, ZKClient>();
 
+    public ZKClient getZkClient(final String zkAddr) throws Exception {
+        return clients.get(appendKey(zkAddr));
+    }
+
     public ZKClient getZkClient(final String zkAddr, final String zkUserName) throws Exception {
         return clients.get(appendKey(zkAddr, zkUserName));
     }
 
     public ZKClient getZkClient(final String zkAddr, final String zkUserName, final String serviceId) throws Exception {
         return clients.get(appendKey(zkAddr, zkUserName, serviceId));
+    }
+
+    private String appendKey(String zkAddr){
+        return appendKey(zkAddr, null, null);
     }
 
     private String appendKey(String zkAddr, String zkUserName) {
