@@ -3,10 +3,6 @@ dependencies {
         exclude group: "org.slf4j", module: "slf4j-api"
         exclude group: "log4j", module: "log4j"
     }
-    compile ('org.apache.commons:commons-pool2:2.2'){
-        exclude group: "org.slf4j", module: "slf4j-api"
-        exclude group: "log4j", module: "log4j"
-    }
     compile ('org.apache.curator:curator-recipes:2.7.1'){
             exclude group: "org.slf4j", module: "slf4j-api"
             exclude group: "log4j", module: "log4j"
@@ -39,22 +35,7 @@ publishing {
                             }
                         }
 
-                        delegate.dependency {
-                            delegate.groupId("org.apache.commons")
-                            delegate.artifactId("commons-pool2")
-                            delegate.version("2.2")
-                            delegate.exclusions{
-                                delegate.exclusion{
-                                    delegate.groupId("org.slf4j")
-                                    delegate.artifactId("slf4j-api")
-                                }
-                                delegate.exclusion{
-                                    delegate.groupId("log4j")
-                                    delegate.artifactId("log4j")
-                                }
-                            }
-                        }
-
+                        
                         delegate.dependency {
                             delegate.groupId("org.apache.curator")
                             delegate.artifactId("curator-recipes")
@@ -77,7 +58,11 @@ publishing {
     }
     repositories {
         maven {
-            url  publishURL
+            if(moduleVersion.endsWith('-SNAPSHOT')) {
+                url publishSnapShotsURL
+            } else {
+                url publishReleaseURL
+            }
             credentials {
                 username = publishUserName
                 password = publishUserPassword

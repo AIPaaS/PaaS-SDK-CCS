@@ -72,7 +72,7 @@ public class ZKPoolFactory {
         Assert.notNull(zkAddress, ResourceUtil.getMessage(BundleKeyConstant.CONFIG_ADDRESS_IS_NULL));
         Assert.notNull(zkUser, ResourceUtil.getMessage(BundleKeyConstant.USER_NAME_IS_NULL));
         Assert.notNull(zkPasswd, ResourceUtil.getMessage(BundleKeyConstant.PASSWD_IS_NULL));
-        Assert.notNull(serviceId, "service id is null!");
+        Assert.notNull(serviceId, ResourceUtil.getMessage(BundleKeyConstant.SERVICEID_IS_NULL));
     }
 
     private static String getAuthInfo(String zkUser, String zkPasswd) {
