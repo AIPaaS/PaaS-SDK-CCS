@@ -33,10 +33,9 @@ public class ConfigClientImpl implements IConfigClient {
     private String userName;
     private String zkUserNodePath;
     private ZKPool zkPool;
-    private String zkAddr;
+	private String zkAddr;
     private ZKClient client;
 
-    private static final String ZK_AUTH_SCHEMA = "digest";
 
     public ConfigClientImpl() {
     }
@@ -46,8 +45,8 @@ public class ConfigClientImpl implements IConfigClient {
             this.authInfo = userName + ":" + password;
             this.userName = userName;
             this.zkAddr = zkAddr;
-            zkPool = ZKPoolFactory.getZKPool(zkAddr, userName, password, serviceId,timeout);
-            this.client =  zkPool.getZkClient(zkAddr, userName, serviceId);
+            zkPool = ZKPoolFactory.getZKPool(this.zkAddr, userName, password, serviceId,timeout);
+            this.client =  zkPool.getZkClient(this.zkAddr, userName, serviceId);
 
             //拼接用户节点
             zkUserNodePath = ConfigCenterConstants.UserNodePrefix.FOR_PAAS_PLATFORM_PREFIX + ConfigCenterConstants.SEPARATOR + userName + PaaSConstant.UNIX_SEPERATOR + serviceId;
