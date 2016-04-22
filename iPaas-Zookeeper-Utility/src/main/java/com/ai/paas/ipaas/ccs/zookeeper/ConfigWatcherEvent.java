@@ -2,15 +2,17 @@ package com.ai.paas.ipaas.ccs.zookeeper;
 
 import org.apache.zookeeper.WatchedEvent;
 
-import com.ai.paas.ipaas.ccs.zookeeper.ConfigWatcher.Event.EventType;
 
 /**
  * Created by astraea on 2015/4/28.
  */
 public class ConfigWatcherEvent {
-    private ConfigWatcher.Event.KeeperState keeperState;
-    private ConfigWatcher.Event.EventType eventType;
-    private String path;
+    @SuppressWarnings("unused")
+	private ConfigWatcher.Event.KeeperState keeperState;
+    @SuppressWarnings("unused")
+	private ConfigWatcher.Event.EventType eventType;
+    @SuppressWarnings("unused")
+	private String path;
     private WatchedEvent event;
 
     public ConfigWatcherEvent(ConfigWatcher.Event.EventType eventType, ConfigWatcher.Event.KeeperState keeperState, String path) {

@@ -6,7 +6,9 @@ import com.ai.paas.ipaas.PaasException;
  * Created by astraea on 2015/4/28.
  */
 public class ConfigException extends PaasException {
-    public ConfigException(String errDetail) {
+	private static final long serialVersionUID = -1348655232003111956L;
+
+	public ConfigException(String errDetail) {
         super(errDetail);
     }
 
