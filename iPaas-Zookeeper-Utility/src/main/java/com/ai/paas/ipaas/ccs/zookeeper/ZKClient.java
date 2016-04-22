@@ -31,16 +31,16 @@ public class ZKClient {
 			throws Exception {
 		Assert.notNull(zkAddr, "zkAddress should not be Null");
 
-		this.zkAddr = zkAddr;
+		this.zkAddr = zkAddr.trim();
 		if (timeOut > 0) {
 			this.timeOut = timeOut;
 		}
 		if (null != auth && auth.length >= 2) {
 			if (!StringUtil.isBlank(auth[0])) {
-				authSchema = auth[0];
+				authSchema = auth[0].trim();
 			}
 			if (!StringUtil.isBlank(auth[1])) {
-				authInfo = auth[1];
+				authInfo = auth[1].trim();
 			}
 		}
 		CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory

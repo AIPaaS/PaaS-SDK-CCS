@@ -21,7 +21,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class ConfigClientImpl implements ICCSComponent {
-    private static transient final Logger log = LoggerFactory.getLogger(ConfigClientImpl.class);
+    @SuppressWarnings("unused")
+	private static transient final Logger log = LoggerFactory.getLogger(ConfigClientImpl.class);
 
     private String zkAddr;
     private String authInfo;
