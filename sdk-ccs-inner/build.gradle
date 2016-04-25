@@ -1,5 +1,5 @@
 dependencies {
-    compile project(":iPaas-Zookeeper-Utility")
+    compile project(":sdk-ccs-base")
 }
 
 publishing {

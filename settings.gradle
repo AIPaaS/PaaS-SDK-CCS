@@ -1,1 +1,1 @@
-include "iPaas-Config-Inner-SDK","iPaas-Config-SDK","iPaas-Zookeeper-Utility"
+include "sdk-ccs-base","sdk-ccs-srv","sdk-ccs-inner"
