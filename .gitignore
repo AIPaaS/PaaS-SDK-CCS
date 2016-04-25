@@ -1,6 +1,5 @@
 .idea/
 .gradle/
-PaaS-SDK-CCS.iml
 /.project
 /.classpath
 /iPaas-Zookeeper-Utility/.project
@@ -12,3 +11,4 @@ PaaS-SDK-CCS.iml
 /iPaas-Config-Inner-SDK/.project
 /iPaas-Config-Inner-SDK/.classpath
 /iPaas-Config-Inner-SDK/.settings
+/.settings
