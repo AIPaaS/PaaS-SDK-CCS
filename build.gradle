@@ -46,7 +46,7 @@ subprojects{
 }
 
 
-project("iPaas-Config-Inner-SDK"){
+project("sdk-ccs-inner"){
     project.ext {
         moduleName = "ipaas-ccs-inner"
     }
@@ -63,7 +63,7 @@ project("iPaas-Config-Inner-SDK"){
     publish.dependsOn build
 }
 
-project("iPaas-Config-SDK"){
+project("sdk-ccs-srv"){
     project.ext {
         moduleName = "ipaas-ccs"
     }
@@ -80,7 +80,7 @@ project("iPaas-Config-SDK"){
     publish.dependsOn build
 }
 
-project("iPaas-Zookeeper-Utility"){
+project("sdk-ccs-base"){
     project.ext {
         moduleName = "ipaas-zookeeper-utility"
     }
