@@ -13,3 +13,9 @@
 /iPaas-Config-Inner-SDK/.settings
 /.settings
 .settings
+/sdk-ccs-base/.classpath
+/sdk-ccs-base/.project
+/sdk-ccs-inner/.classpath
+/sdk-ccs-inner/.project
+/sdk-ccs-srv/.classpath
+/sdk-ccs-srv/.project
