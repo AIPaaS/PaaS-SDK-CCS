@@ -2,6 +2,7 @@ package com.ai.paas.ipaas.ccs.zookeeper;
 
 import com.ai.paas.ipaas.ccs.constants.ConfigCenterConstants;
 import com.ai.paas.ipaas.ccs.constants.ZkErrorCodeConstants;
+import com.ai.paas.ipaas.ccs.util.ZKUtil;
 import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKPool;
 import com.ai.paas.ipaas.util.Assert;
 import com.ai.paas.ipaas.util.StringUtil;
@@ -108,6 +109,8 @@ public class ZKClient {
 
 	public void createNode(String nodePath, List<ACL> acls, byte[] data,
 			CreateMode createMode) throws Exception {
+		//判断是否路径带着/如果没带，加上
+		nodePath=ZKUtil.processPath(nodePath);
 		client.create().creatingParentsIfNeeded().withMode(createMode)
 				.withACL(acls).forPath(nodePath, data);
 	}
@@ -139,6 +142,7 @@ public class ZKClient {
 	 * @throws Exception
 	 */
 	public void createSeqNode(String nodePath) throws Exception {
+		nodePath=ZKUtil.processPath(nodePath);
 		client.create().creatingParentsIfNeeded()
 				.withMode(CreateMode.PERSISTENT_SEQUENTIAL)
 				.withACL(Ids.OPEN_ACL_UNSAFE).forPath(nodePath);
