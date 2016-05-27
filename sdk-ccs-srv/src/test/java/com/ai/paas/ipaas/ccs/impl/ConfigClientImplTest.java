@@ -1,23 +1,25 @@
 package com.ai.paas.ipaas.ccs.impl;
 
-import com.ai.paas.ipaas.ccs.ConfigFactory;
-import com.ai.paas.ipaas.ccs.IConfigClient;
-import com.ai.paas.ipaas.ccs.constants.ConfigCenterConstants;
-import com.ai.paas.ipaas.ccs.constants.ConfigException;
-import com.ai.paas.ipaas.ccs.impl.util.ConfigSDKUtil;
-import com.ai.paas.ipaas.ccs.zookeeper.ZKClient;
-import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKPoolFactory;
-import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
-import com.ai.paas.ipaas.util.CiperUtil;
-import com.ai.paas.ipaas.util.UUIDTool;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
 import org.apache.zookeeper.CreateMode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
-import static org.junit.Assert.*;
+import com.ai.paas.ipaas.ccs.ConfigFactory;
+import com.ai.paas.ipaas.ccs.IConfigClient;
+import com.ai.paas.ipaas.ccs.constants.ConfigException;
+import com.ai.paas.ipaas.ccs.impl.util.ConfigSDKUtil;
+import com.ai.paas.ipaas.ccs.zookeeper.ZKClient;
+import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKPoolFactory;
+import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 
 /**
  * Created by astraea on 2015/4/29.
