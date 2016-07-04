@@ -13,11 +13,12 @@ public class TestClient {
     @Test
     public void test() throws Exception {
         AuthDescriptor ad = new AuthDescriptor();
-        ad.setPassword("mvne");
-        ad.setServiceId("CCS001");
-        ad.setAuthAdress("http://10.1.228.198:14821/iPaas-Auth/service/check");
-        ad.setUserName("mvne@asiainfo.com");
+        ad.setPassword("123456");
+        ad.setServiceId("CCS007");
+        ad.setAuthAdress("http://10.1.245.4:19811/service-portal-uac-web/service/auth");
+        ad.setPid("DD9AA862535641EEA67A25F719E37CBD");
         IConfigClient client = ConfigFactory.getConfigClient(ad);
+        System.out.println(client.get("/com/ai/opt/paas-mdsns-mds-mapped"));
     }
 
 }
