@@ -22,7 +22,7 @@ public class ZKPoolFactory {
     }
 
     public static ZKPool getZKPool(String zkAddress, String zkUser, String zkPasswd) throws ConfigException {
-        return getZKPool(zkAddress, zkUser, zkPasswd, 2000);
+        return getZKPool(zkAddress, zkUser, zkPasswd, 60000);
     }
 
     public static ZKPool getZKPool(String zkAddress, String zkUser, String zkPasswd, String serviceId) throws ConfigException {
