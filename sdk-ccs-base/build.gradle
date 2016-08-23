@@ -11,6 +11,51 @@ dependencies {
 
 publishing {
     publications {
+        mavenJar(MavenPublication) {
+	       	groupId group
+	        artifactId "${moduleName}"
+	        artifact sourcesJar
+	        version moduleVersion
+	        pom.withXml {
+                asNode().children().last() + {
+                    delegate.dependencies {
+                        delegate.dependency {
+                            delegate.groupId("org.apache.curator")
+                            delegate.artifactId("curator-framework")
+                            delegate.version("2.10.0")
+                            delegate.exclusions{
+                                delegate.exclusion{
+                                    delegate.groupId("org.slf4j")
+                                    delegate.artifactId("slf4j-api")
+                                }
+                                delegate.exclusion{
+                                    delegate.groupId("log4j")
+                                    delegate.artifactId("log4j")
+                                }
+                            }
+                        }
+
+                        
+                        delegate.dependency {
+                            delegate.groupId("org.apache.curator")
+                            delegate.artifactId("curator-recipes")
+                            delegate.version("2.10.0")
+                            delegate.exclusions{
+                                delegate.exclusion{
+                                    delegate.groupId("org.slf4j")
+                                    delegate.artifactId("slf4j-api")
+                                }
+                                delegate.exclusion{
+                                    delegate.groupId("log4j")
+                                    delegate.artifactId("log4j")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }        
+            
         publishing.publications.create("${moduleName}", MavenPublication) {
             groupId group
             artifactId moduleName
