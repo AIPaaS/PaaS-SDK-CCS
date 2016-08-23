@@ -5,6 +5,7 @@ import com.ai.paas.ipaas.ccs.inner.util.ConfigSDKUtil;
 import com.ai.paas.ipaas.ccs.zookeeper.ZKClient;
 import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKPoolFactory;
 import com.ai.paas.ipaas.util.CiperUtil;
+
 import org.apache.zookeeper.CreateMode;
 import org.junit.Test;
 
@@ -26,7 +27,8 @@ public class TestComponent {
 
     private String readOnlyPathA ="/DSS/DSS001";
     private String readonlyValue ="{\"dbName\":\"DSS1\",\"size\":\"128\",\"limitSize\":\"12\"}";
-    private String modifyValue = "{'metadata.broker.list':'10.1.228.198:39091,10.1.228.199:39091,10.1.228.202:39091','serializer.class':'kafka.serializer.DefaultEncoder','key.serializer.class':'kafka.serializer.StringEncoder','partitioner.class':'com.ai.paas.ipaas.mds.impl.sender.ModPartitioner','request.required.acks':'1','queue.buffering.max.messages':'1048576','producer.type':'sync','message.send.max.retries':'3','compression.codec':'none','request.timeout.ms':'20000','batch.num.messages':'64000','send.buffer.bytes':'67108864','maxProducer':'5'}";
+    @SuppressWarnings("unused")
+	private String modifyValue = "{'metadata.broker.list':'10.1.228.198:39091,10.1.228.199:39091,10.1.228.202:39091','serializer.class':'kafka.serializer.DefaultEncoder','key.serializer.class':'kafka.serializer.StringEncoder','partitioner.class':'com.ai.paas.ipaas.mds.impl.sender.ModPartitioner','request.required.acks':'1','queue.buffering.max.messages':'1048576','producer.type':'sync','message.send.max.retries':'3','compression.codec':'none','request.timeout.ms':'20000','batch.num.messages':'64000','send.buffer.bytes':'67108864','maxProducer':'5'}";
 
     @Test
     public void testadd() throws Exception {

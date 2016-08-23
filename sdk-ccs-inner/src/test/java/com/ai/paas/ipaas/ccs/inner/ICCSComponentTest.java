@@ -10,6 +10,7 @@ import com.ai.paas.ipaas.ccs.zookeeper.ZKClient;
 import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKPoolFactory;
 import com.ai.paas.ipaas.util.CiperUtil;
 import com.ai.paas.ipaas.util.UUIDTool;
+
 import org.apache.zookeeper.CreateMode;
 import org.junit.After;
 import org.junit.Before;
@@ -152,7 +153,8 @@ public class ICCSComponentTest {
     @Test(expected = ConfigException.class)
     public void testReadOnlyNoExistNodeSubChild() throws ConfigException {
         ICCSComponent componentClient = CCSComponentFactory.getConfigClient(configAddr, userName, CiperUtil.encrypt(ConfigCenterConstants.operators, String.valueOf(userPwd)));
-        List<String> childrenPath = componentClient.listSubPath(parentReadOnlyPath + 1);
+        @SuppressWarnings("unused")
+		List<String> childrenPath = componentClient.listSubPath(parentReadOnlyPath + 1);
     }
 
     @Test
@@ -183,7 +185,8 @@ public class ICCSComponentTest {
     @Test(expected = ConfigException.class)
     public void testWritableNoExistsSubChild() throws ConfigException {
         ICCSComponent componentClient = CCSComponentFactory.getConfigClient(configAddr, userName, CiperUtil.encrypt(ConfigCenterConstants.operators, String.valueOf(userPwd)));
-        List<String> childrenPath = componentClient.listSubPath(parentReadOnlyPath + 1, ConfigPathMode.WRITABLE);
+        @SuppressWarnings("unused")
+		List<String> childrenPath = componentClient.listSubPath(parentReadOnlyPath + 1, ConfigPathMode.WRITABLE);
     }
 
     @Test
