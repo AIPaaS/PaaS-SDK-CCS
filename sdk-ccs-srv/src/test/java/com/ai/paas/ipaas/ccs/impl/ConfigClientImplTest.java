@@ -131,7 +131,8 @@ public class ConfigClientImplTest {
         assertEquals(0, subPaths.size());
     }
 
-    @Test(expected = ConfigException.class)
+    @SuppressWarnings("unused")
+	@Test(expected = ConfigException.class)
     public void testNoExistPathListSubPath() throws Exception {
         IConfigClient client = getiConfigClient();
         List<String> subPaths = client.listSubPath(testPathA + 1);
