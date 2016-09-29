@@ -4,8 +4,11 @@ allprojects{
     apply plugin: 'maven-publish'
 
     ext {
-        moduleVersion="0.3";
-        //moduleVersion="0.3-SNAPSHOT"
+		moduleVersion = version != "unspecified"?version:'0.3'
+		moduleMode = project.hasProperty('mode') ? project.getProperty('mode') : 'R'
+		if(moduleMode == 'S'){
+			moduleVersion = moduleVersion + "-SNAPSHOT";
+		}
         publishUserName = "devadm"
         publishUserPassword = "Devadm@1212"
         publishSnapShotsURL="http://10.1.228.199:18081/nexus/content/repositories/snapshots/"
@@ -62,23 +65,15 @@ project("sdk-ccs-inner"){
             attributes 'packageName': moduleName, 'Built-By': builtBy,'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
         }
     }
-task sourcesJar(type: Jar, dependsOn: classes) {
+	task sourcesJar(type: Jar, dependsOn: classes) {
 		baseName moduleName
 	    version moduleVersion
 	    classifier = 'sources'
 	    from sourceSets.main.allSource
 	}
 	
-	task javadocJar(type: Jar, dependsOn: javadoc) {
-		baseName moduleName
-	    version moduleVersion
-	    classifier = 'javadoc'
-	    from javadoc.destinationDir
-	}
-	
 	artifacts {
 	    archives sourcesJar
-	    archives javadocJar
 	}
     publish.dependsOn build
 }
@@ -103,19 +98,11 @@ project("sdk-ccs-srv"){
 	    from sourceSets.main.allSource
 	}
 	
-	task javadocJar(type: Jar, dependsOn: javadoc) {
-		baseName moduleName
-	    version moduleVersion
-	    classifier = 'javadoc'
-	    from javadoc.destinationDir
-	}
-	
 	artifacts {
 	    archives sourcesJar
-	    archives javadocJar
 	}
 	    publish.dependsOn build
-	}
+}
 
 project("sdk-ccs-base"){
     project.ext {
@@ -137,16 +124,9 @@ project("sdk-ccs-base"){
 	    from sourceSets.main.allSource
 	}
 	
-	task javadocJar(type: Jar, dependsOn: javadoc) {
-		baseName moduleName
-	    version moduleVersion
-	    classifier = 'javadoc'
-	    from javadoc.destinationDir
-	}
 	
 	artifacts {
 	    archives sourcesJar
-	    archives javadocJar
 	}
     publish.dependsOn build
 }
