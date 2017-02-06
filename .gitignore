@@ -19,3 +19,5 @@
 /sdk-ccs-inner/.project
 /sdk-ccs-srv/.classpath
 /sdk-ccs-srv/.project
+/build/
+/.DS_Store
