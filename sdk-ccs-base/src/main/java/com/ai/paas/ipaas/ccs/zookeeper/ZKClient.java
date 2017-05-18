@@ -28,8 +28,15 @@ public class ZKClient {
 	private String authInfo = null;
 	private ZKPool pool = null;
 
-	public ZKClient(String zkAddr, int timeOut, String... auth)
-			throws Exception {
+	public ZKClient(String zkAddr, int timeOut) throws Exception {
+		init(zkAddr, timeOut, null, null);
+	}
+
+	public ZKClient(String zkAddr, int timeOut, String authSchema, String authInfo) throws Exception {
+		init(zkAddr, timeOut, authSchema, authInfo);
+	}
+
+	public ZKClient(String zkAddr, int timeOut, String... auth) throws Exception {
 		Assert.notNull(zkAddr, "zkAddress should not be Null");
 
 		this.zkAddr = zkAddr.trim();
@@ -44,10 +51,18 @@ public class ZKClient {
 				authInfo = auth[1].trim();
 			}
 		}
-		CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory
-				.builder().connectString(this.zkAddr)
-				.connectionTimeoutMs(this.timeOut)
-				.retryPolicy(new RetryNTimes(Integer.MAX_VALUE, 10));
+		init(this.zkAddr, this.timeOut, this.authSchema, this.authInfo);
+	}
+
+	private void init(String zkAddr, int timeOut, String authSchema, String authInfo) throws Exception {
+		Assert.notNull(zkAddr, "zkAddress should not be Null");
+
+		this.zkAddr = zkAddr.trim();
+		if (timeOut > 0) {
+			this.timeOut = timeOut;
+		}
+		CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder().connectString(this.zkAddr)
+				.connectionTimeoutMs(this.timeOut).retryPolicy(new RetryNTimes(Integer.MAX_VALUE, 10));
 		if (!StringUtil.isBlank(authSchema) && !StringUtil.isBlank(authInfo)) {
 			builder.authorization(authSchema, authInfo.getBytes());
 		}
@@ -73,14 +88,12 @@ public class ZKClient {
 		return getNodeData(nodePath, false);
 	}
 
-	public String getNodeData(String nodePath, Watcher watcher)
-			throws Exception {
+	public String getNodeData(String nodePath, Watcher watcher) throws Exception {
 		byte[] data = getNodeBytes(nodePath, watcher);
 		return new String(data, ZkErrorCodeConstants.CHARSET_UTF8);
 	}
 
-	public byte[] getNodeBytes(String nodePath, Watcher watcher)
-			throws Exception {
+	public byte[] getNodeBytes(String nodePath, Watcher watcher) throws Exception {
 		byte[] bytes = null;
 		if (null != watcher)
 			bytes = client.getData().usingWatcher(watcher).forPath(nodePath);
@@ -94,25 +107,21 @@ public class ZKClient {
 		return getNodeBytes(nodePath, null);
 	}
 
-	public void createNode(String nodePath, String data, CreateMode createMode)
-			throws Exception {
+	public void createNode(String nodePath, String data, CreateMode createMode) throws Exception {
 		createNode(nodePath, Ids.OPEN_ACL_UNSAFE, data, createMode);
 	}
 
-	public void createNode(String nodePath, List<ACL> acls, String data,
-			CreateMode createMode) throws Exception {
+	public void createNode(String nodePath, List<ACL> acls, String data, CreateMode createMode) throws Exception {
 		byte[] bytes = null;
 		if (!StringUtil.isBlank(data))
 			bytes = data.getBytes(ZkErrorCodeConstants.CHARSET_UTF8);
 		createNode(nodePath, acls, bytes, createMode);
 	}
 
-	public void createNode(String nodePath, List<ACL> acls, byte[] data,
-			CreateMode createMode) throws Exception {
-		//判断是否路径带着/如果没带，加上
-		nodePath=ZKUtil.processPath(nodePath);
-		client.create().creatingParentsIfNeeded().withMode(createMode)
-				.withACL(acls).forPath(nodePath, data);
+	public void createNode(String nodePath, List<ACL> acls, byte[] data, CreateMode createMode) throws Exception {
+		// 判断是否路径带着/如果没带，加上
+		nodePath = ZKUtil.processPath(nodePath);
+		client.create().creatingParentsIfNeeded().withMode(createMode).withACL(acls).forPath(nodePath, data);
 	}
 
 	public void createNode(String nodePath, String data) throws Exception {
@@ -130,8 +139,7 @@ public class ZKClient {
 		client.setData().forPath(nodePath, data);
 	}
 
-	public List<String> getChildren(String nodePath, Watcher watcher)
-			throws Exception {
+	public List<String> getChildren(String nodePath, Watcher watcher) throws Exception {
 		return client.getChildren().usingWatcher(watcher).forPath(nodePath);
 	}
 
@@ -142,9 +150,8 @@ public class ZKClient {
 	 * @throws Exception
 	 */
 	public void createSeqNode(String nodePath) throws Exception {
-		nodePath=ZKUtil.processPath(nodePath);
-		client.create().creatingParentsIfNeeded()
-				.withMode(CreateMode.PERSISTENT_SEQUENTIAL)
+		nodePath = ZKUtil.processPath(nodePath);
+		client.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT_SEQUENTIAL)
 				.withACL(Ids.OPEN_ACL_UNSAFE).forPath(nodePath);
 	}
 
@@ -154,16 +161,14 @@ public class ZKClient {
 
 	public boolean exists(String path, Watcher watcher) throws Exception {
 		if (null != watcher) {
-			return null == client.checkExists().watched().forPath(path) ? false
-					: true;
+			return null == client.checkExists().watched().forPath(path) ? false : true;
 		} else {
 			return null == client.checkExists().forPath(path) ? false : true;
 		}
 	}
 
 	public boolean isConnected() {
-		if (null == client
-				|| !CuratorFrameworkState.STARTED.equals(client.getState())) {
+		if (null == client || !CuratorFrameworkState.STARTED.equals(client.getState())) {
 			return false;
 		}
 		return true;
@@ -177,8 +182,7 @@ public class ZKClient {
 		return client.getChildren().forPath(path);
 	}
 
-	public List<String> getChildren(String path, boolean watcher)
-			throws Exception {
+	public List<String> getChildren(String path, boolean watcher) throws Exception {
 		if (watcher) {
 			return client.getChildren().watched().forPath(path);
 		} else {
@@ -191,8 +195,7 @@ public class ZKClient {
 	}
 
 	public void quit() {
-		if (null != client
-				&& CuratorFrameworkState.STARTED.equals(client.getState())) {
+		if (null != client && CuratorFrameworkState.STARTED.equals(client.getState())) {
 			client.close();
 		}
 	}
@@ -205,13 +208,9 @@ public class ZKClient {
 		this.pool = pool;
 	}
 
-	public ZKClient addAuth(final String authSchema, final String authInfo)
-			throws Exception {
-		this.client
-				.getZookeeperClient()
-				.getZooKeeper()
-				.addAuthInfo(ConfigCenterConstants.ZKAuthSchema.DIGEST,
-						authInfo.getBytes());
+	public ZKClient addAuth(final String authSchema, final String authInfo) throws Exception {
+		this.client.getZookeeperClient().getZooKeeper().addAuthInfo(ConfigCenterConstants.ZKAuthSchema.DIGEST,
+				authInfo.getBytes());
 		return this;
 	}
 

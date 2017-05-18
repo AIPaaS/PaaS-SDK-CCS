@@ -16,7 +16,7 @@ publishing {
                         delegate.dependency {
                             delegate.groupId("com.ai")
                             delegate.artifactId("ipaas-zookeeper-utility")
-                            delegate.version("0.3")
+                            delegate.version("0.3.1")
                         }
 
                         delegate.dependency {
@@ -40,7 +40,7 @@ publishing {
                         delegate.dependency {
                             delegate.groupId("com.ai")
                             delegate.artifactId("ipaas-zookeeper-utility")
-                            delegate.version("0.3")
+                            delegate.version("0.3.1")
                         }
 
                         delegate.dependency {

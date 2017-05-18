@@ -1,4 +1,7 @@
 dependencies {
+	compile "org.springframework:spring-context:4.3.6.RELEASE"
+	compile "commons-io:commons-io:2.4"
+	compile "xml-apis:xml-apis:1.4.01"
     compile ('org.apache.curator:curator-framework:2.10.0'){
         exclude group: "org.slf4j", module: "slf4j-api"
         exclude group: "log4j", module: "log4j"
@@ -34,6 +37,11 @@ publishing {
                                 }
                             }
                         }
+                       delegate.dependency {
+                            delegate.groupId("commons-io")
+                            delegate.artifactId("commons-io")
+                            delegate.version("2.4")
+                       }                        
 
                         
                         delegate.dependency {
@@ -80,6 +88,11 @@ publishing {
                             }
                         }
 
+                       delegate.dependency {
+                            delegate.groupId("commons-io")
+                            delegate.artifactId("commons-io")
+                            delegate.version("2.4")
+                       } 
                         
                         delegate.dependency {
                             delegate.groupId("org.apache.curator")

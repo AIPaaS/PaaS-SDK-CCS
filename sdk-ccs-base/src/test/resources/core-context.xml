@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+		   http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		   http://www.springframework.org/schema/aop
+		   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		   http://www.springframework.org/schema/tx
+		   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		   http://mybatis.org/schema/mybatis-spring 
+		   http://mybatis.org/schema/mybatis-spring.xsd">
+	<!-- 加载配置文件 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="order" value="10" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="locations" value="classpath:dubbo.properties" />
+	</bean>
+	<bean id="zkClient" class="com.ai.paas.ipaas.ccs.zookeeper.ZKClient">
+		<constructor-arg name="zkAddr" value="${dubbo.registry.address}" />
+		<constructor-arg name="timeOut" value="${dubbo.provider.timeout}" />
+	</bean>
+	<!-- 使用托管方式的disconf配置(无代码侵入, 配置更改不会自动reload) -->
+	<bean id="cssConfig"
+		class="com.ai.paas.ipaas.ccs.addons.properties.CSSPropertyPlaceholderConfigurer">
+		<property name="order" value="20" />
+		<property name="zkClientName" value="zkClient" />
+		<property name="locations">
+			<list>
+				<!-- first is for zookeeper path,use dot for /, second is for local file, which is store classpath path, 
+				 third and fouth can ommitted or only has one . local will write props to localfile, spring will load
+				 into spring contextpath -->
+				<value>com.ai.test.test=/test/myserver.properties=local=spring</value>
+				<value>com.ai.test.dxf{json}=/test/myserver1.properties=local=spring</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 启动注解扫描 -->
+	<context:annotation-config />
+	<!-- 设定注解扫描基础包 -->
+	<context:component-scan base-package="com.ai.channel" />
+
+</beans>
