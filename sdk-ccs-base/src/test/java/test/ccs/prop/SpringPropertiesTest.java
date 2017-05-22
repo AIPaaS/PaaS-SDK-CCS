@@ -22,6 +22,9 @@ public class SpringPropertiesTest {
 		prop.setProperty("dxf", "654321");
 		StringWriter writer = new StringWriter();
 		prop.store(writer, "");
+		if(!zkClient.exists("/com/ai/test/test")){
+			zkClient.createNode("/com/ai/test/test", "");
+		}
 		zkClient.setNodeData("/com/ai/test/test", writer.getBuffer().toString());
 		Gson gson = new Gson();
 		JsonObject json = new JsonObject();
@@ -46,7 +49,6 @@ public class SpringPropertiesTest {
 		context.start();
 		System.out.println(context.getBeanFactory().resolveEmbeddedValue("${test}"));
 		System.out.println(context.getBeanFactory().resolveEmbeddedValue("${dxf}"));
-		System.out.println(context.getBeanFactory().resolveEmbeddedValue("${client}"));
 		context.close();
 	}
 

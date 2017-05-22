@@ -25,6 +25,7 @@
 	<bean id="zkClient" class="com.ai.paas.ipaas.ccs.zookeeper.ZKClient">
 		<constructor-arg name="zkAddr" value="${dubbo.registry.address}" />
 		<constructor-arg name="timeOut" value="${dubbo.provider.timeout}" />
+		<property name="appName" value="${dubbo.appname}" />
 	</bean>
 	<!-- 使用托管方式的disconf配置(无代码侵入, 配置更改不会自动reload) -->
 	<bean id="cssConfig"

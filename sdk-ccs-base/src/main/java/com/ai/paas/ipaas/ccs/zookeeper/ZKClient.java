@@ -27,6 +27,7 @@ public class ZKClient {
 	private String authSchema = null;
 	private String authInfo = null;
 	private ZKPool pool = null;
+	private String appName="";
 
 	public ZKClient(String zkAddr, int timeOut) throws Exception {
 		init(zkAddr, timeOut, null, null);
@@ -206,6 +207,15 @@ public class ZKClient {
 
 	public void setPool(ZKPool pool) {
 		this.pool = pool;
+	}
+	
+
+	public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
 	}
 
 	public ZKClient addAuth(final String authSchema, final String authInfo) throws Exception {

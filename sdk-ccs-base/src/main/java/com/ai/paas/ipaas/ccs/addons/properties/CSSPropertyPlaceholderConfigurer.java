@@ -3,6 +3,7 @@ package com.ai.paas.ipaas.ccs.addons.properties;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -59,7 +60,6 @@ public class CSSPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigu
 		boolean loadInSpring = false;
 		Properties props = new Properties();
 		for (String filename : locations) {
-
 			// trim
 			filename = filename.trim();
 			String[] splits = filename.split("=");
@@ -84,14 +84,15 @@ public class CSSPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigu
 				}
 			}
 			// judge it is a json format
-			String zkPath = splits[0];
+			String zkPath = StringUtil.isBlank(zkClient.getAppName()) ? splits[0]
+					: zkClient.getAppName() + "." + splits[0];
 			boolean isJson = zkPath.endsWith(PROPS_FORMAT_JSON);
 			if (isJson) {
 				zkPath = zkPath.substring(0, zkPath.indexOf(PROPS_FORMAT_JSON));
 			}
 			if (writeToLocal) {
 				String realFileName = getFileName(splits[1]);
-				writeToLocal(getKeyZKPath(zkPath), realFileName);
+				writeToLocal(getKeyZKPath(zkPath), realFileName, isJson);
 			}
 			if (loadInSpring) {
 				props.putAll(loadProperties(getKeyZKPath(zkPath), isJson));
@@ -177,21 +178,47 @@ public class CSSPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigu
 	 * @param key
 	 * @param filename
 	 */
-	private void writeToLocal(String key, String filename) {
+	private void writeToLocal(String key, String filename, boolean isJson) {
 		// 初始化
 		if (null == zkClient) {
 			throw new RuntimeException("Can not init the zk client!");
 		}
+		File localFile = null;
 		// 开始读取
 		try {
 			String data = zkClient.getNodeData(key);
 			// 写到本地文件,都是类路径文件,不考虑其他地址
-			String basePath = this.getClass().getClassLoader().getResource("").getPath();
-			File localFile = new File(basePath + filename);
-			FileUtils.writeStringToFile(localFile, data);
+			String basePath = Thread.currentThread().getContextClassLoader().getResource("/").getPath();
+			localFile = new File(basePath + filename);
+			if (!StringUtil.isBlank(data)) {
+				if (isJson) {
+					// convert to json array
+					Gson gson = new Gson();
+					JsonObject json = gson.fromJson(data, JsonObject.class);
+					if (null != json) {
+						Set<Entry<String, JsonElement>> attrs = json.entrySet();
+						Iterator<Entry<String, JsonElement>> iter = attrs.iterator();
+						List<String> lines = new ArrayList<>();
+						Entry<String, JsonElement> entry = null;
+						while (iter.hasNext()) {
+							entry = iter.next();
+							lines.add(entry.getKey() + "=" + entry.getValue().getAsString());
+						}
+						FileUtils.writeLines(localFile, lines);
+						lines.clear();
+					}
+				} else {
+					// 写到本地文件,都是类路径文件,不考虑其他地址
+					FileUtils.writeStringToFile(localFile, data);
+				}
+			}
 		} catch (Exception e) {
 			log.error("", e);
 			throw new RuntimeException(e);
+		} finally {
+			if (null != localFile) {
+				localFile = null;
+			}
 		}
 	}
 
