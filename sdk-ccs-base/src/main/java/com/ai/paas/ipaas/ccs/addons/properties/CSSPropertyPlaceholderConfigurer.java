@@ -17,6 +17,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
+import com.ai.paas.ipaas.PaaSConstant;
 import com.ai.paas.ipaas.ccs.zookeeper.ZKClient;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.google.gson.Gson;
@@ -204,12 +205,12 @@ public class CSSPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigu
 							entry = iter.next();
 							lines.add(entry.getKey() + "=" + entry.getValue().getAsString());
 						}
-						FileUtils.writeLines(localFile, lines);
+						FileUtils.writeLines(localFile, PaaSConstant.CHARSET_UTF8, lines);
 						lines.clear();
 					}
 				} else {
 					// 写到本地文件,都是类路径文件,不考虑其他地址
-					FileUtils.writeStringToFile(localFile, data);
+					FileUtils.writeStringToFile(localFile, data, PaaSConstant.CHARSET_UTF8);
 				}
 			}
 		} catch (Exception e) {
