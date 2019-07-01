@@ -28,10 +28,8 @@ public class ConfigClientImplTest {
     private final String configAddr = "10.1.228.198:39182";
     private final String modifyValueC = "test Path C";
 
-    //private String userName = UUIDTool.genId32();
     private String userName = "zhanglei11@asiainfo.com";
    
-    //private int userPwd = UUIDTool.genShortId();
     private String userPwd = "111111";
     
     private String adminName = "admin";
@@ -41,7 +39,6 @@ public class ConfigClientImplTest {
     private String testPathA = parentPath + "/test1";
     private String testPathB = parentPath + "/test2";
     
-    //private String serviceId = UUIDTool.genId32();   
     private String serviceId = "CCS001";
     
     private String testPathAValue = "test a ttttAAAA";
@@ -49,11 +46,10 @@ public class ConfigClientImplTest {
 
     @Before
     public void setUp() throws Exception {
-        ZKClient client = ZKFactory.getZKPool(configAddr, adminName, adminPwd).getZkClient(configAddr, adminName);
+        ZKClient client = ZKFactory.getZkClient(configAddr, adminName,adminPwd);
         client.createNode(ConfigSDKUtil.appendUserNodePath(userName, serviceId), ConfigSDKUtil.createWritableACL(userName,
                 String.valueOf(userPwd), adminName, adminPwd), "test a tttt", CreateMode.PERSISTENT);
         assertTrue(client.exists(ConfigSDKUtil.appendUserNodePath(userName, serviceId)));
-        //testAdd();
     }
 
     @Test(expected = ConfigException.class)
@@ -64,7 +60,7 @@ public class ConfigClientImplTest {
 
     @After
     public void tearDown() throws Exception {
-        ZKClient client = ZKFactory.getZKPool(configAddr, adminName, adminPwd).getZkClient(configAddr, adminName);
+        ZKClient client = ZKFactory.getZkClient(configAddr, adminName,adminPwd);
         client.deleteNode(ConfigSDKUtil.appendUserNodePath(userName, serviceId));
         assertFalse(client.exists(ConfigSDKUtil.appendUserNodePath(userName, serviceId)));
     }
@@ -143,7 +139,6 @@ public class ConfigClientImplTest {
         descriptor.setServiceId(serviceId);
         descriptor.setUserName(userName);
         descriptor.setAuthAdress("http://10.1.228.198:14821/iPaas-Auth/service/check");
-        //descriptor.setPassword(CiperUtil.encrypt(ConfigCenterConstants.operators, String.valueOf(userPwd)));
         descriptor.setPassword(userPwd);
         return ConfigFactory.getConfigClient(descriptor);
     }

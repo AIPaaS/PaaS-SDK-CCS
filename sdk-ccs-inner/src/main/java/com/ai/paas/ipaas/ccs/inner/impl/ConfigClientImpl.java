@@ -28,6 +28,7 @@ public class ConfigClientImpl implements ICCSComponent {
     private String zkUserNodePath;
     private String passwd;
     private int timeout;
+    ZKClient zkClient = null;
 
     public ConfigClientImpl() {
     }
@@ -39,6 +40,7 @@ public class ConfigClientImpl implements ICCSComponent {
         this.passwd = passwd;
         this.timeout = timeout;
 
+        zkClient = getZkClient();
         zkUserNodePath = ConfigConstant.UserNodePrefix.FOR_PAAS_PLATFORM_PREFIX + Constant.UNIX_SEPERATOR + userName;
 
         // 校验用户节点是否存在，不存在则提示给用户
@@ -51,9 +53,7 @@ public class ConfigClientImpl implements ICCSComponent {
     }
 
     private boolean userNodeIsExist() {
-        ZKClient zkClient = null;
         try {
-            zkClient = getZkClient();
             return zkClient.exists(zkUserNodePath);
         } catch (Exception e) {
             throw new ConfigException(ResourceUtil.getMessage(BundleKeyConstant.USER_NODE_NOT_EXISTS), e);
@@ -61,12 +61,12 @@ public class ConfigClientImpl implements ICCSComponent {
     }
 
     private ZKClient getZkClient() {
-        ZKClient zkClient = ZKFactory.getZkClient(zkAddr, userName, passwd, timeout);
+        ZKClient client = ZKFactory.getZkClient(zkAddr, userName, passwd, timeout);
 
-        if (zkClient == null)
+        if (client == null)
             throw new ConfigException(ResourceUtil.getMessage(BundleKeyConstant.GET_CONFIG_CLIENT_FAILED));
 
-        return zkClient;
+        return client;
     }
 
     /**
@@ -75,10 +75,8 @@ public class ConfigClientImpl implements ICCSComponent {
      * @return
      */
     private boolean userAuth() {
-        ZKClient client = null;
         try {
-            client = getZkClient();
-            client.getNodeData(zkUserNodePath, false);
+            zkClient.getNodeData(zkUserNodePath, false);
             return true;
         } catch (Exception e) {
             if (e instanceof KeeperException.NoAuthException) {
@@ -118,9 +116,7 @@ public class ConfigClientImpl implements ICCSComponent {
             return;
         }
 
-        ZKClient zkClient = null;
         try {
-            zkClient = getZkClient();
             zkClient.createNode(ConfigPathMode.appendPath(userName, ConfigPathMode.WRITABLE.getFlag(), path),
                     ZKUtil.createWritableACL(authInfo), value, AddMode.convertMode(addMode.getFlag()));
         } catch (Exception e) {
@@ -138,9 +134,7 @@ public class ConfigClientImpl implements ICCSComponent {
     public MutexLock getMutexLock(String path) {
         if (!validatePath(path))
             throw new ConfigException(ResourceUtil.getMessage(BundleKeyConstant.PATH_ILL));
-        ZKClient zkClient = null;
         try {
-            zkClient = getZkClient();
             return new MutexLock(zkClient
                     .getInterProcessLock(ConfigPathMode.appendPath(userName, ConfigPathMode.WRITABLE.getFlag(), path)));
         } catch (Exception e) {
@@ -169,9 +163,7 @@ public class ConfigClientImpl implements ICCSComponent {
             throw new ConfigException(ResourceUtil.getMessage(BundleKeyConstant.PATH_NOT_EXISTS, path));
         }
 
-        ZKClient zkClient = null;
         try {
-            zkClient = getZkClient();
             zkClient.setNodeData(ConfigPathMode.appendPath(userName, ConfigPathMode.WRITABLE.getFlag(), path), value);
         } catch (Exception e) {
             if (e instanceof KeeperException.NoAuthException) {
@@ -189,9 +181,7 @@ public class ConfigClientImpl implements ICCSComponent {
             throw new ConfigException(ResourceUtil.getMessage(BundleKeyConstant.PATH_NOT_EXISTS, path));
         }
 
-        ZKClient zkClient = null;
         try {
-            zkClient = getZkClient();
             return zkClient.getChildren(ConfigPathMode.appendPath(userName, pathMode.getFlag(), path), watcher);
         } catch (Exception e) {
             if (e instanceof KeeperException.NoAuthException) {
@@ -224,9 +214,7 @@ public class ConfigClientImpl implements ICCSComponent {
             return;
         }
 
-        ZKClient zkClient = null;
         try {
-            zkClient = getZkClient();
             zkClient.deleteNode(ConfigPathMode.appendPath(userName, ConfigPathMode.WRITABLE.getFlag(), path));
         } catch (Exception e) {
             if (e instanceof KeeperException.NoAuthException) {
@@ -260,10 +248,8 @@ public class ConfigClientImpl implements ICCSComponent {
             throw new ConfigException(ResourceUtil.getMessage(BundleKeyConstant.PATH_NOT_EXISTS, path));
         }
 
-        ZKClient client = null;
         try {
-            client = getZkClient();
-            return client.getNodeData(ConfigPathMode.appendPath(userName, pathMode.getFlag(), path), watcher);
+            return zkClient.getNodeData(ConfigPathMode.appendPath(userName, pathMode.getFlag(), path), watcher);
         } catch (Exception e) {
             if (e instanceof KeeperException.NoAuthException) {
                 throw new ConfigException(ResourceUtil.getMessage(BundleKeyConstant.USER_AUTH_FAILED, path));
@@ -293,10 +279,8 @@ public class ConfigClientImpl implements ICCSComponent {
             throw new ConfigException(ResourceUtil.getMessage(BundleKeyConstant.PATH_NOT_EXISTS, path));
         }
 
-        ZKClient client = null;
         try {
-            client = getZkClient();
-            return client.getNodeBytes(ConfigPathMode.appendPath(userName, pathMode.getFlag(), path), watcher);
+            return zkClient.getNodeBytes(ConfigPathMode.appendPath(userName, pathMode.getFlag(), path), watcher);
         } catch (Exception e) {
             if (e instanceof KeeperException.NoAuthException) {
                 throw new ConfigException(ResourceUtil.getMessage(BundleKeyConstant.USER_AUTH_FAILED, path));
@@ -332,9 +316,7 @@ public class ConfigClientImpl implements ICCSComponent {
 
     @Override
     public boolean exists(String path, ConfigPathMode pathMode, ConfigWatcher watcher) {
-        ZKClient zkClient = null;
         try {
-            zkClient = getZkClient();
             if (null != watcher) {
                 return zkClient.exists(ConfigPathMode.appendPath(userName, pathMode.getFlag(), path), watcher);
             } else {

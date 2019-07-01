@@ -51,7 +51,7 @@ public class ZKFactory {
         return getZkClient(zkAddress, zkUser, zkPasswd, null, timeOut);
     }
 
-    private static ZKClient getZkClient(String zkAddress, String zkUser, String zkPasswd, String serviceId,
+    public static ZKClient getZkClient(String zkAddress, String zkUser, String zkPasswd, String serviceId,
             int timeOut) {
         ZKClient client = null;
         try {
