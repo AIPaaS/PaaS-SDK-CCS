@@ -18,7 +18,7 @@ import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.ccs.constants.ConfigException;
 import com.ai.paas.ipaas.ccs.impl.util.ConfigSDKUtil;
 import com.ai.paas.ipaas.ccs.zookeeper.ZKClient;
-import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKPoolFactory;
+import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKFactory;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
 
 /**
@@ -49,7 +49,7 @@ public class ConfigClientImplTest {
 
     @Before
     public void setUp() throws Exception {
-        ZKClient client = ZKPoolFactory.getZKPool(configAddr, adminName, adminPwd).getZkClient(configAddr, adminName);
+        ZKClient client = ZKFactory.getZKPool(configAddr, adminName, adminPwd).getZkClient(configAddr, adminName);
         client.createNode(ConfigSDKUtil.appendUserNodePath(userName, serviceId), ConfigSDKUtil.createWritableACL(userName,
                 String.valueOf(userPwd), adminName, adminPwd), "test a tttt", CreateMode.PERSISTENT);
         assertTrue(client.exists(ConfigSDKUtil.appendUserNodePath(userName, serviceId)));
@@ -64,7 +64,7 @@ public class ConfigClientImplTest {
 
     @After
     public void tearDown() throws Exception {
-        ZKClient client = ZKPoolFactory.getZKPool(configAddr, adminName, adminPwd).getZkClient(configAddr, adminName);
+        ZKClient client = ZKFactory.getZKPool(configAddr, adminName, adminPwd).getZkClient(configAddr, adminName);
         client.deleteNode(ConfigSDKUtil.appendUserNodePath(userName, serviceId));
         assertFalse(client.exists(ConfigSDKUtil.appendUserNodePath(userName, serviceId)));
     }

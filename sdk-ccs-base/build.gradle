@@ -1,12 +1,10 @@
 dependencies {
-	compile "org.springframework:spring-context:4.3.6.RELEASE"
-	compile "commons-io:commons-io:2.4"
-	compile "xml-apis:xml-apis:1.4.01"
-    compile ('org.apache.curator:curator-framework:2.10.0'){
+	compile "commons-io:commons-io:2.6"
+    compile ('org.apache.curator:curator-framework:4.2.0'){
         exclude group: "org.slf4j", module: "slf4j-api"
         exclude group: "log4j", module: "log4j"
     }
-    compile ('org.apache.curator:curator-recipes:2.10.0'){
+    compile ('org.apache.curator:curator-recipes:4.2.0'){
             exclude group: "org.slf4j", module: "slf4j-api"
             exclude group: "log4j", module: "log4j"
     }
@@ -17,101 +15,38 @@ publishing {
         mavenJar(MavenPublication) {
 	       	groupId group
 	        artifactId "${moduleName}"
-	        artifact sourcesJar
-	        version moduleVersion
-	        pom.withXml {
-                asNode().children().last() + {
-                    delegate.dependencies {
-                        delegate.dependency {
-                            delegate.groupId("org.apache.curator")
-                            delegate.artifactId("curator-framework")
-                            delegate.version("2.10.0")
-                            delegate.exclusions{
-                                delegate.exclusion{
-                                    delegate.groupId("org.slf4j")
-                                    delegate.artifactId("slf4j-api")
-                                }
-                                delegate.exclusion{
-                                    delegate.groupId("log4j")
-                                    delegate.artifactId("log4j")
-                                }
-                            }
-                        }
-                       delegate.dependency {
-                            delegate.groupId("commons-io")
-                            delegate.artifactId("commons-io")
-                            delegate.version("2.4")
-                       }                        
-
-                        
-                        delegate.dependency {
-                            delegate.groupId("org.apache.curator")
-                            delegate.artifactId("curator-recipes")
-                            delegate.version("2.10.0")
-                            delegate.exclusions{
-                                delegate.exclusion{
-                                    delegate.groupId("org.slf4j")
-                                    delegate.artifactId("slf4j-api")
-                                }
-                                delegate.exclusion{
-                                    delegate.groupId("log4j")
-                                    delegate.artifactId("log4j")
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }        
-            
-        publishing.publications.create("${moduleName}", MavenPublication) {
-            groupId group
-            artifactId moduleName
-            version moduleVersion
+        	version moduleVersion
             artifact  jar
-            pom.withXml {
-                asNode().children().last() + {
-                    delegate.dependencies {
-                        delegate.dependency {
-                            delegate.groupId("org.apache.curator")
-                            delegate.artifactId("curator-framework")
-                            delegate.version("2.10.0")
-                            delegate.exclusions{
-                                delegate.exclusion{
-                                    delegate.groupId("org.slf4j")
-                                    delegate.artifactId("slf4j-api")
-                                }
-                                delegate.exclusion{
-                                    delegate.groupId("log4j")
-                                    delegate.artifactId("log4j")
-                                }
-                            }
-                        }
 
-                       delegate.dependency {
-                            delegate.groupId("commons-io")
-                            delegate.artifactId("commons-io")
-                            delegate.version("2.4")
-                       } 
-                        
-                        delegate.dependency {
-                            delegate.groupId("org.apache.curator")
-                            delegate.artifactId("curator-recipes")
-                            delegate.version("2.10.0")
-                            delegate.exclusions{
-                                delegate.exclusion{
-                                    delegate.groupId("org.slf4j")
-                                    delegate.artifactId("slf4j-api")
-                                }
-                                delegate.exclusion{
-                                    delegate.groupId("log4j")
-                                    delegate.artifactId("log4j")
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+			artifact (sourcesJar) { classifier "sources" }
+            pom.withXml {
+				//Creating additional node for dependencies
+				def dependenciesNode = asNode().appendNode('dependencies')
+
+				//Defining configuration names from which dependencies will be taken (debugCompile or releaseCompile and compile)
+				def configurationNames = ['compile']
+
+				configurationNames.each { configurationName ->
+					configurations[configurationName].allDependencies.each {
+						if (it.group != null && it.name != null) {
+							def dependencyNode = dependenciesNode.appendNode('dependency')
+							dependencyNode.appendNode('groupId', it.group)
+							dependencyNode.appendNode('artifactId', it.name)
+							dependencyNode.appendNode('version', it.version)
+
+							//If there are any exclusions in dependency
+							if (it.excludeRules.size() > 0) {
+								def exclusionsNode = dependencyNode.appendNode('exclusions')
+								it.excludeRules.each { rule ->
+									def exclusionNode = exclusionsNode.appendNode('exclusion')
+									exclusionNode.appendNode('groupId', rule.group)
+									exclusionNode.appendNode('artifactId', rule.module)
+								}
+							}
+						}
+					}
+				}
+			}
         }
     }
     repositories {
@@ -122,8 +57,8 @@ publishing {
                 url publishReleaseURL
             }
             credentials {
-                username = publishUserName
-                password = publishUserPassword
+                username = repoUser
+				password = repoPassword
             }
         }
     }

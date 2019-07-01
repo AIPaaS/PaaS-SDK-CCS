@@ -4,12 +4,12 @@ import com.ai.paas.ipaas.PaaSConstant;
 import com.ai.paas.ipaas.ccs.IConfigClient;
 import com.ai.paas.ipaas.ccs.constants.AddMode;
 import com.ai.paas.ipaas.ccs.constants.BundleKeyConstant;
-import com.ai.paas.ipaas.ccs.constants.ConfigCenterConstants;
+import com.ai.paas.ipaas.ccs.constants.ConfigConstant;
 import com.ai.paas.ipaas.ccs.constants.ConfigException;
 import com.ai.paas.ipaas.ccs.zookeeper.ConfigWatcher;
 import com.ai.paas.ipaas.ccs.zookeeper.ZKClient;
 import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKPool;
-import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKPoolFactory;
+import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKFactory;
 import com.ai.paas.ipaas.util.ResourceUtil;
 import com.ai.paas.ipaas.util.StringUtil;
 
@@ -46,13 +46,13 @@ public class ConfigClientImpl implements IConfigClient {
 			this.authInfo = userName + ":" + password;
 			this.userName = userName;
 			this.zkAddr = zkAddr;
-			zkPool = ZKPoolFactory.getZKPool(this.zkAddr, userName, password,
+			zkPool = ZKFactory.getZKPool(this.zkAddr, userName, password,
 					serviceId, timeout);
 			this.client = zkPool.getZkClient(this.zkAddr, userName, serviceId);
 
 			// 拼接用户节点
-			zkUserNodePath = ConfigCenterConstants.UserNodePrefix.FOR_PAAS_PLATFORM_PREFIX
-					+ ConfigCenterConstants.SEPARATOR
+			zkUserNodePath = ConfigConstant.UserNodePrefix.FOR_PAAS_PLATFORM_PREFIX
+					+ ConfigConstant.SEPARATOR
 					+ userName
 					+ PaaSConstant.UNIX_SEPERATOR + serviceId;
 

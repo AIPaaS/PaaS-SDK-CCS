@@ -1,6 +1,6 @@
 package com.ai.paas.ipaas.ccs.impl.util;
 
-import com.ai.paas.ipaas.ccs.constants.ConfigCenterConstants;
+import com.ai.paas.ipaas.ccs.constants.ConfigConstant;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Id;
@@ -13,7 +13,7 @@ import java.util.List;
 public class ConfigSDKUtil {
 
     public static String appendUserNodePath(String userId, String serviceId) {
-        return ConfigCenterConstants.UserNodePrefix.FOR_USER_CUSTOM_PREFIX + ConfigCenterConstants.SEPARATOR + userId + ConfigCenterConstants.SEPARATOR + serviceId;
+        return ConfigConstant.UserNodePrefix.FOR_USER_CUSTOM_PREFIX + ConfigConstant.SEPARATOR + userId + ConfigConstant.SEPARATOR + serviceId;
     }
 
 

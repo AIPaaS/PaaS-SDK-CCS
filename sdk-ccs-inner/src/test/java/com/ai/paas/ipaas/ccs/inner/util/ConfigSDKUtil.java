@@ -1,6 +1,6 @@
 package com.ai.paas.ipaas.ccs.inner.util;
 
-import com.ai.paas.ipaas.ccs.constants.ConfigCenterConstants;
+import com.ai.paas.ipaas.ccs.constants.ConfigConstant;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Id;
@@ -12,11 +12,11 @@ import java.util.List;
 
 public class ConfigSDKUtil {
     public static String appendUserReadOnlyPathPath(String userId) {
-        return ConfigCenterConstants.UserNodePrefix.FOR_PAAS_PLATFORM_PREFIX + ConfigCenterConstants.SEPARATOR + userId + ConfigCenterConstants.UserNodePrefix.FOR_PAAS_PLATFORM_HAS_READ_PREFIX;
+        return ConfigConstant.UserNodePrefix.FOR_PAAS_PLATFORM_PREFIX + ConfigConstant.SEPARATOR + userId + ConfigConstant.UserNodePrefix.FOR_PAAS_PLATFORM_HAS_READ_PREFIX;
     }
 
     public static String appendUserWritablePathPath(String userId) {
-        return ConfigCenterConstants.UserNodePrefix.FOR_PAAS_PLATFORM_PREFIX + ConfigCenterConstants.SEPARATOR + userId + ConfigCenterConstants.UserNodePrefix.FOR_PAAS_PLATFORM_HAS_WRITABLE_PREFIX;
+        return ConfigConstant.UserNodePrefix.FOR_PAAS_PLATFORM_PREFIX + ConfigConstant.SEPARATOR + userId + ConfigConstant.UserNodePrefix.FOR_PAAS_PLATFORM_HAS_WRITABLE_PREFIX;
     }
 
 

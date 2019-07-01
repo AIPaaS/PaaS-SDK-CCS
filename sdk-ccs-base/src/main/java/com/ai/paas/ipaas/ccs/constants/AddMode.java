@@ -22,20 +22,19 @@ public enum AddMode {
         return flag;
     }
 
-    static public CreateMode convertMode(int flag) throws ConfigException {
+    public static CreateMode convertMode(int flag) throws ConfigException {
         switch (flag) {
-            case 0:
-                return CreateMode.PERSISTENT;
-            case 1:
-                return CreateMode.EPHEMERAL;
-            case 2:
-                return CreateMode.PERSISTENT_SEQUENTIAL;
-            case 3:
-                return CreateMode.EPHEMERAL_SEQUENTIAL;
-            default:
-                String errMsg = "Received an invalid flag value: " + flag
-                        + " to convert to a CreateMode";
-                throw new ConfigException(errMsg);
+        case 0:
+            return CreateMode.PERSISTENT;
+        case 1:
+            return CreateMode.EPHEMERAL;
+        case 2:
+            return CreateMode.PERSISTENT_SEQUENTIAL;
+        case 3:
+            return CreateMode.EPHEMERAL_SEQUENTIAL;
+        default:
+            String errMsg = "Received an invalid flag value: " + flag + " to convert to a CreateMode";
+            throw new ConfigException(errMsg);
         }
     }
 }

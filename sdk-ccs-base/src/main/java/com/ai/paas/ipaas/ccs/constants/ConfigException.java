@@ -1,14 +1,14 @@
 package com.ai.paas.ipaas.ccs.constants;
 
-import com.ai.paas.ipaas.PaasException;
+import com.ai.paas.GeneralRuntimeException;
 
 /**
  * Created by astraea on 2015/4/28.
  */
-public class ConfigException extends PaasException {
-	private static final long serialVersionUID = -1348655232003111956L;
+public class ConfigException extends GeneralRuntimeException {
+    private static final long serialVersionUID = -1348655232003111956L;
 
-	public ConfigException(String errDetail) {
+    public ConfigException(String errDetail) {
         super(errDetail);
     }
 

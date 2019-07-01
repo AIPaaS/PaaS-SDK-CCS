@@ -1,8 +1,8 @@
 package com.ai.paas.ipaas.ccs.constants;
 
-import com.ai.paas.ipaas.PaaSConstant;
+import com.ai.paas.Constant;
 
-public class ZkErrorCodeConstants extends PaaSConstant {
+public class ZkErrorCodeConstants extends Constant {
     public static final String CONFIG_ZK_ERROR = "40001";
 
     public static final String AUTH_FAILED = "50000";

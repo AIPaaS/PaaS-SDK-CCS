@@ -1,10 +1,10 @@
 package com.ai.paas.ipaas.ccs;
 
 import com.ai.paas.ipaas.PaaSConstant;
-import com.ai.paas.ipaas.ccs.constants.ConfigCenterConstants;
+import com.ai.paas.ipaas.ccs.constants.ConfigConstant;
 import com.ai.paas.ipaas.ccs.impl.ConfigClientImpl;
 import com.ai.paas.ipaas.ccs.zookeeper.ZKClient;
-import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKPoolFactory;
+import com.ai.paas.ipaas.ccs.zookeeper.impl.ZKFactory;
 import com.ai.paas.ipaas.uac.service.IUserClient;
 import com.ai.paas.ipaas.uac.service.UserClientFactory;
 import com.ai.paas.ipaas.uac.vo.AuthDescriptor;
@@ -66,10 +66,10 @@ public class ConfigFactory {
 		AuthResult result = userClient.auth(ad);
 
 		// 获取缓存服务的Zookeeper地址用户名和密码
-		ZKClient client = ZKPoolFactory.getZKPool(
+		ZKClient client = ZKFactory.getZKPool(
 				result.getConfigAddr(),
 				result.getConfigUser(),
-				CiperUtil.decrypt(ConfigCenterConstants.operators,
+				CiperUtil.decrypt(ConfigConstant.OPERATORS,
 						result.getConfigPasswd()), ad.getServiceId())
 				.getZkClient(result.getConfigAddr(), result.getConfigUser(),
 						ad.getServiceId());
@@ -87,7 +87,7 @@ public class ConfigFactory {
 				.intValue();
 
 		configClient = new ConfigClientImpl(zkAddr, zkUser, CiperUtil.decrypt(
-				ConfigCenterConstants.operators, zkPasswd), ad.getServiceId(),
+				ConfigConstant.OPERATORS, zkPasswd), ad.getServiceId(),
 				timeout);
 		configClientCache.put(ad.getPid() + "_" + ad.getServiceId(),
 				configClient);
@@ -95,11 +95,11 @@ public class ConfigFactory {
 	}
 
 	private static String apendUserNodePath(AuthDescriptor ad, AuthResult result) {
-		return ConfigCenterConstants.UserNodePrefix.FOR_PAAS_PLATFORM_PREFIX
+		return ConfigConstant.UserNodePrefix.FOR_PAAS_PLATFORM_PREFIX
 				+ PaaSConstant.UNIX_SEPERATOR
 				+ result.getUserId()
-				+ ConfigCenterConstants.UserNodePrefix.FOR_PAAS_PLATFORM_HAS_READ_PREFIX
-				+ ConfigCenterConstants.CONFIG_SERVICE_NODE_NAME
+				+ ConfigConstant.UserNodePrefix.FOR_PAAS_PLATFORM_HAS_READ_PREFIX
+				+ ConfigConstant.CONFIG_SERVICE_NODE_NAME
 				+ PaaSConstant.UNIX_SEPERATOR + ad.getServiceId();
 	}
 
