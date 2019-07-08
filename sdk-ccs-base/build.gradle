@@ -1,10 +1,14 @@
 dependencies {
 	compile "commons-io:commons-io:2.6"
+	// https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper
+	compile group: 'org.apache.zookeeper', name: 'zookeeper', version: '3.4.14'
     compile ('org.apache.curator:curator-framework:4.2.0'){
+    	exclude group: "org.apache.zookeeper", module: "zookeeper"
         exclude group: "org.slf4j", module: "slf4j-api"
         exclude group: "log4j", module: "log4j"
     }
     compile ('org.apache.curator:curator-recipes:4.2.0'){
+    		exclude group: "org.apache.zookeeper", module: "zookeeper"
             exclude group: "org.slf4j", module: "slf4j-api"
             exclude group: "log4j", module: "log4j"
     }

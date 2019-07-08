@@ -13,16 +13,15 @@ import com.ai.paas.util.UUIDTool;
 
 import org.apache.zookeeper.CreateMode;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class ICCSComponentTest {
+public class CCSComponentTest {
 
-    private final String configAddr = "127.0.0.1:2181";
+    private final String configAddr = "10.19.10.88:18183";
 
     private final String writableValue = "test value";
     private String readonlyValue = "test a ttttAAAA";
@@ -39,7 +38,7 @@ public class ICCSComponentTest {
     private String writablePath = parentReadOnlyPath + "/writable";
     private String removePath = parentReadOnlyPath + "/removePath";
 
-    @Before
+    @Test
     public void setUp() throws Exception {
         ZKClient client = ZKFactory.getZkClient(configAddr, adminName, adminPwd);
 
@@ -62,17 +61,18 @@ public class ICCSComponentTest {
                 ConfigSDKUtil.createReadOnlyACL(userName, String.valueOf(userPwd), adminName, adminPwd), readonlyValue,
                 CreateMode.PERSISTENT);
         assertTrue(client.exists(ConfigSDKUtil.appendUserReadOnlyPathPath(userName) + readOnlyPathA));
-
+       
         createWritableNode();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testNoParameterThrows() throws ConfigException {
+    public void testNoParameterThrows()  {
         CCSComponentFactory.getConfigClient(configAddr, "admin", "");
     }
 
     @Test
-    private void createWritableNode() throws ConfigException {
+    public void createWritableNode() {
+        
         ICCSComponent componentClient = CCSComponentFactory.getConfigClient(configAddr, userName,
                 CiperUtil.encrypt(ConfigConstant.OPERATORS, String.valueOf(userPwd)));
         componentClient.add(writablePath, writableValue);
