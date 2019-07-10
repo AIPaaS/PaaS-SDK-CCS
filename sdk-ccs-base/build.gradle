@@ -20,7 +20,7 @@ publishing {
 	       	groupId group
 	        artifactId "${moduleName}"
         	version moduleVersion
-            artifact  jar
+        	artifact jar
 
 			artifact (sourcesJar) { classifier "sources" }
             pom.withXml {
